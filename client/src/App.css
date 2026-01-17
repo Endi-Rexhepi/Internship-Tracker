@@ -1,0 +1,72 @@
+:root{
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: rgba(15, 23, 42, 0.08);
+}
+
+body{
+  background: radial-gradient(1200px 700px at 20% 0%, #eef2ff 0%, var(--bg) 55%, #fff 120%);
+  color: var(--text);
+}
+
+.container-max{
+  max-width: 1120px;
+}
+
+.soft-card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.soft-header{
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(99,102,241,0.10) 0%, rgba(255,255,255,0.0) 100%);
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+
+.subtle{
+  color: var(--muted);
+}
+
+.pill{
+  border-radius: 999px !important;
+}
+
+.form-control, .form-select, .btn{
+  border-radius: 14px;
+}
+
+.badge-soft{
+  border: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.kanban-col{
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.kanban-drop{
+  min-height: 260px;
+  border-radius: 14px;
+  padding: 6px;
+}
+
+.kanban-card{
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 10px 18px rgba(15, 23, 42, 0.05);
+}
+
+.kanban-card:active{
+  cursor: grabbing;
+}
