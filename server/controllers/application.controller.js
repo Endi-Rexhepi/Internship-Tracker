@@ -5,7 +5,7 @@ module.exports.create = async (req, res) => {
     const created = await Application.create({ ...req.body, userId: req.userId });
     res.status(201).json(created);
   } catch (err) {
-    res.status(400).json(err);
+    res.status(400).json({ message: "Validation failed. Make sure Company and Role are at least 2 characters." });
   }
 };
 
@@ -18,18 +18,17 @@ module.exports.getAll = async (req, res) => {
     const apps = await Application.find(filter).sort({ dateApplied: -1, createdAt: -1 });
     res.json(apps);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: "Could not fetch applications." });
   }
 };
 
-
 module.exports.getOne = async (req, res) => {
   try {
-    const found = await Application.findById(req.params.id);
+    const found = await Application.findOne({ _id: req.params.id, userId: req.userId });
     if (!found) return res.status(404).json({ message: "Not found" });
     res.json(found);
   } catch (err) {
-    res.status(400).json(err);
+    res.status(400).json({ message: "Invalid request." });
   }
 };
 
@@ -43,7 +42,7 @@ module.exports.update = async (req, res) => {
     if (!updated) return res.status(404).json({ message: "Not found" });
     res.json(updated);
   } catch (err) {
-    res.status(400).json(err);
+    res.status(400).json({ message: "Update failed. Check that all fields are valid." });
   }
 };
 
@@ -53,7 +52,6 @@ module.exports.remove = async (req, res) => {
     if (!deleted) return res.status(404).json({ message: "Not found" });
     res.json({ message: "Deleted" });
   } catch (err) {
-    res.status(400).json(err);
+    res.status(400).json({ message: "Could not delete application." });
   }
 };
-

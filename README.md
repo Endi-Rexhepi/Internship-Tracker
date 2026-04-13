@@ -1,53 +1,104 @@
-# Internship Application Tracker (Full-Stack)
+# Internship Tracker
 
-A full-stack web application that helps users manage and track internship/job applications using a dashboard, list view, and a Kanban board workflow.
+A full-stack app I built to manage my own internship applications. I got tired of maintaining a messy spreadsheet and wanted something with a better workflow, so I built this instead.
+
+The main draw is the Kanban board — you can drag applications between stages (Applied, Interview, Offer, Rejected) and everything syncs to the database instantly. Each user has their own private data behind JWT auth.
 
 ## Features
-- **User Authentication (JWT)**
-  - Register / Login / Logout
-  - Secure API access using JWT tokens
-- **Application Management (CRUD)**
-  - Create, view, update, and delete applications
-  - Each application belongs to the logged-in user (data isolation)
-- **Kanban Board**
-  - Drag and drop applications between statuses:
-    - Applied → Interview → Offer / Rejected
-  - Status updates are saved instantly in the database
-- **Dashboard Overview**
-  - Displays counts of applications per status
-- **Filtering**
-  - Filter applications by status (Applied, Interview, Offer, Rejected)
+
+- Register / Login / Logout with JWT authentication
+- Add, edit, and delete applications
+- Drag and drop Kanban board for tracking stages
+- Dashboard with live counts per status
+- Filter the list view by status
+- Each application stores company, role, job link, date applied, and notes
 
 ## Tech Stack
+
 **Frontend**
-- React (Vite)
+- React 18 + Vite
 - Bootstrap 5
 - Axios
-- @dnd-kit/core (Drag & Drop)
+- @dnd-kit/core for drag and drop
 
 **Backend**
-- Node.js
-- Express.js
+- Node.js + Express
 - MongoDB + Mongoose
-- JWT Authentication
-- bcrypt (password hashing)
+- JWT (jsonwebtoken)
+- bcrypt for password hashing
+- helmet for security headers
+- express-rate-limit on auth routes
+
+## Running It Locally
+
+You'll need Node.js and a MongoDB instance (local or Atlas).
+
+**1. Clone the repo**
+
+```bash
+git clone https://github.com/Endi-Rexhepi/Internship-Tracker.git
+cd Internship-Tracker
+```
+
+**2. Set up the backend**
+
+```bash
+cd server
+cp .env.example .env
+# Edit .env with your MongoDB URI and a real JWT secret
+npm install
+npm run dev
+```
+
+**3. Set up the frontend**
+
+Open a second terminal:
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Or from the project root, run both at once:
+
+```bash
+npm install
+npm run dev
+```
+
+The app will be at `http://localhost:5173` and the API at `http://localhost:8000`.
 
 ## API Routes
-### Auth
-- `POST /api/auth/register` → Create new user
-- `POST /api/auth/login` → Login and receive JWT token
 
-### Applications (Protected)
-- `GET /api/applications` → Get all applications for logged-in user
-- `POST /api/applications` → Create new application
-- `PUT /api/applications/:id` → Update application (status, notes, etc.)
-- `DELETE /api/applications/:id` → Delete application
+**Auth**
+- `POST /api/auth/register` — create account
+- `POST /api/auth/login` — login, returns JWT
 
-## Run Locally
-### 1) Backend Setup
-Create a `.env` file inside the `server/` folder:
+**Applications** (all protected, require Bearer token)
+- `GET /api/applications` — get all for logged-in user (supports `?status=` filter)
+- `POST /api/applications` — create new application
+- `GET /api/applications/:id` — get one by ID
+- `PUT /api/applications/:id` — update (status, notes, etc.)
+- `DELETE /api/applications/:id` — delete
 
-```env
-MONGO_URI=mongodb://127.0.0.1:27017/internshipTracker
-PORT=8000
-JWT_SECRET=your_secret_key
+## Project Structure
+
+```
+internship-tracker/
+├── client/          # React + Vite frontend
+│   ├── src/
+│   │   ├── components/
+│   │   ├── App.jsx
+│   │   └── api.js
+│   └── vite.config.js
+├── server/          # Express + MongoDB backend
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── config/
+│   ├── .env.example
+│   └── server.js
+└── package.json     # Root — run both with concurrently
+```

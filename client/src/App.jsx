@@ -13,9 +13,10 @@ export default function App() {
   const [apps, setApps] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
   const [errors, setErrors] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [authMode, setAuthMode] = useState("login"); 
+  const [authMode, setAuthMode] = useState("login");
   const [user, setUser] = useState(() => {
     const raw = localStorage.getItem("user");
     return raw ? JSON.parse(raw) : null;
@@ -28,6 +29,12 @@ export default function App() {
     setApps([]);
     setStatusFilter("All");
     setErrors(null);
+    setSuccessMsg(null);
+  };
+
+  const showSuccess = (msg) => {
+    setSuccessMsg(msg);
+    setTimeout(() => setSuccessMsg(null), 3000);
   };
 
   const fetchApps = async () => {
@@ -38,10 +45,7 @@ export default function App() {
       const res = await api.get("/api/applications", { params });
       setApps(res.data);
     } catch (e) {
-      if (e?.response?.status === 401) {
-        logout();
-        return;
-      }
+      if (e?.response?.status === 401) { logout(); return; }
       setErrors("Failed to load applications.");
     } finally {
       setLoading(false);
@@ -63,12 +67,10 @@ export default function App() {
       setErrors(null);
       await api.post("/api/applications", payload);
       fetchApps();
+      showSuccess("Application added!");
     } catch (e) {
-      if (e?.response?.status === 401) {
-        logout();
-        return;
-      }
-      setErrors("Could not create application. Make sure Company/Role are at least 2 characters.");
+      if (e?.response?.status === 401) { logout(); return; }
+      setErrors(e?.response?.data?.message || "Could not create application.");
     }
   };
 
@@ -78,16 +80,21 @@ export default function App() {
       await api.put(`/api/applications/${id}`, { status });
       fetchApps();
     } catch (e) {
-      if (e?.response?.status === 401) {
-        logout();
-        return;
-      }
+      if (e?.response?.status === 401) { logout(); return; }
       setErrors("Could not update status.");
     }
   };
 
-  const handleMove = async (id, status) => {
-    await handleUpdateStatus(id, status);
+  const handleUpdateFull = async (id, payload) => {
+    try {
+      setErrors(null);
+      await api.put(`/api/applications/${id}`, payload);
+      fetchApps();
+      showSuccess("Application updated!");
+    } catch (e) {
+      if (e?.response?.status === 401) { logout(); return; }
+      setErrors(e?.response?.data?.message || "Could not update application.");
+    }
   };
 
   const handleDelete = async (id) => {
@@ -96,10 +103,7 @@ export default function App() {
       await api.delete(`/api/applications/${id}`);
       fetchApps();
     } catch (e) {
-      if (e?.response?.status === 401) {
-        logout();
-        return;
-      }
+      if (e?.response?.status === 401) { logout(); return; }
       setErrors("Could not delete application.");
     }
   };
@@ -151,19 +155,9 @@ export default function App() {
         <div className="row justify-content-center">
           <div className="col-12 col-md-8 col-lg-6">
             {authMode === "login" ? (
-              <Login
-                onAuth={(u) => {
-                  setUser(u);
-                  setAuthMode("login");
-                }}
-              />
+              <Login onAuth={(u) => { setUser(u); setAuthMode("login"); }} />
             ) : (
-              <Register
-                onAuth={(u) => {
-                  setUser(u);
-                  setAuthMode("login");
-                }}
-              />
+              <Register onAuth={(u) => { setUser(u); setAuthMode("login"); }} />
             )}
           </div>
         </div>
@@ -221,10 +215,11 @@ export default function App() {
       </div>
 
       {errors && <div className="alert alert-danger">{errors}</div>}
+      {successMsg && <div className="alert alert-success">{successMsg}</div>}
 
       <Dashboard counts={counts} />
 
-      <KanbanBoard apps={apps} onMove={handleMove} />
+      <KanbanBoard apps={apps} onMove={handleUpdateStatus} />
 
       <div className="row g-3 mt-2">
         <div className="col-md-5">
@@ -248,6 +243,7 @@ export default function App() {
               loading={loading}
               statusFilter={statusFilter}
               onUpdateStatus={handleUpdateStatus}
+              onUpdateFull={handleUpdateFull}
               onDelete={handleDelete}
             />
           </div>

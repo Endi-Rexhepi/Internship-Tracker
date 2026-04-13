@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const today = new Date().toISOString().split("T")[0];
+
 export default function ApplicationForm({ onCreate }) {
   const [form, setForm] = useState({
     company: "",
@@ -7,6 +9,7 @@ export default function ApplicationForm({ onCreate }) {
     link: "",
     status: "Applied",
     notes: "",
+    dateApplied: today,
   });
 
   const onChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
@@ -23,59 +26,65 @@ export default function ApplicationForm({ onCreate }) {
       notes: form.notes.trim(),
     });
 
-    setForm({ company: "", role: "", link: "", status: "Applied", notes: "" });
+    setForm({ company: "", role: "", link: "", status: "Applied", notes: "", dateApplied: today });
   };
 
   return (
-    <div className="card">
-      <div className="card-header fw-semibold">Add Application</div>
-      <div className="card-body">
-        <form onSubmit={submit} className="d-grid gap-2">
-          <input
-            className="form-control"
-            placeholder="Company (e.g., Amazon)"
-            name="company"
-            value={form.company}
-            onChange={onChange}
-            required
-            minLength={2}
-          />
-          <input
-            className="form-control"
-            placeholder="Role (e.g., Software Engineer Intern)"
-            name="role"
-            value={form.role}
-            onChange={onChange}
-            required
-            minLength={2}
-          />
-          <input
-            className="form-control"
-            placeholder="Job Link (optional)"
-            name="link"
-            value={form.link}
-            onChange={onChange}
-          />
-          <select className="form-select" name="status" value={form.status} onChange={onChange}>
-            <option>Applied</option>
-            <option>Interview</option>
-            <option>Offer</option>
-            <option>Rejected</option>
-          </select>
-          <textarea
-            className="form-control"
-            placeholder="Notes (optional)"
-            name="notes"
-            value={form.notes}
-            onChange={onChange}
-            rows={3}
-          />
-          <button className="btn btn-primary">Save</button>
-          <div className="text-muted" style={{ fontSize: 12 }}>
-            Company/Role must be at least 2 characters.
-          </div>
-        </form>
+    <form onSubmit={submit} className="d-grid gap-2">
+      <input
+        className="form-control"
+        placeholder="Company (e.g., Amazon)"
+        name="company"
+        value={form.company}
+        onChange={onChange}
+        required
+        minLength={2}
+      />
+      <input
+        className="form-control"
+        placeholder="Role (e.g., Software Engineer Intern)"
+        name="role"
+        value={form.role}
+        onChange={onChange}
+        required
+        minLength={2}
+      />
+      <input
+        className="form-control"
+        type="url"
+        placeholder="Job Link (optional)"
+        name="link"
+        value={form.link}
+        onChange={onChange}
+      />
+      <select className="form-select" name="status" value={form.status} onChange={onChange}>
+        <option value="Applied">Applied</option>
+        <option value="Interview">Interview</option>
+        <option value="Offer">Offer</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+
+      <label className="subtle mb-0" style={{ fontSize: 12 }}>Date Applied</label>
+      <input
+        className="form-control"
+        type="date"
+        name="dateApplied"
+        value={form.dateApplied}
+        onChange={onChange}
+      />
+
+      <textarea
+        className="form-control"
+        placeholder="Notes (optional)"
+        name="notes"
+        value={form.notes}
+        onChange={onChange}
+        rows={3}
+      />
+      <button className="btn btn-primary">Save</button>
+      <div className="subtle" style={{ fontSize: 12 }}>
+        Company and Role must be at least 2 characters.
       </div>
-    </div>
+    </form>
   );
 }

@@ -31,6 +31,7 @@ export default function Login({ onAuth }) {
           </label>
           <input
             className="form-control"
+            type="email"
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
