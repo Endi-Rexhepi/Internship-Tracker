@@ -4,6 +4,18 @@ Keeping track of what I've worked on and fixed as this project evolved.
 
 ---
 
+## Deployment
+
+The app is fully deployed and live:
+
+- **Frontend** — Vercel (auto-deploys on every push to `main`)
+- **Backend** — Render (auto-deploys on every push to `main`)
+- **Database** — MongoDB Atlas
+
+No manual setup needed to use the app — just visit the live URL.
+
+---
+
 ## Round 2 — Full Cleanup & Polish
 
 Went back through the whole codebase and fixed a bunch of things I either missed the first time or just left as "good enough."

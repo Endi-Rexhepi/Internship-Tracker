@@ -4,6 +4,12 @@ A full-stack app I built to manage my own internship applications. I got tired o
 
 The main draw is the Kanban board — you can drag applications between stages (Applied, Interview, Offer, Rejected) and everything syncs to the database instantly. Each user has their own private data behind JWT auth.
 
+## Live Demo
+
+**Frontend:** [internship-tracker-gray.vercel.app](https://internship-tracker-gray.vercel.app)  
+**Backend API:** Hosted on Render  
+**Database:** MongoDB Atlas
+
 ## Features
 
 - Register / Login / Logout with JWT authentication
@@ -23,13 +29,13 @@ The main draw is the Kanban board — you can drag applications between stages (
 
 **Backend**
 - Node.js + Express
-- MongoDB + Mongoose
+- MongoDB Atlas + Mongoose
 - JWT (jsonwebtoken)
 - bcrypt for password hashing
 - helmet for security headers
 - express-rate-limit on auth routes
 
-## Running It Locally
+## Running Locally
 
 You'll need Node.js and a MongoDB instance (local or Atlas).
 
@@ -45,7 +51,7 @@ cd Internship-Tracker
 ```bash
 cd server
 cp .env.example .env
-# Edit .env with your MongoDB URI and a real JWT secret
+# Edit .env with your MongoDB URI and a JWT secret
 npm install
 npm run dev
 ```
