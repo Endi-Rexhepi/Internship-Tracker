@@ -10,6 +10,8 @@ The main draw is the Kanban board — you can drag applications between stages (
 **Backend API:** Hosted on Render  
 **Database:** MongoDB Atlas
 
+> **Note:** The backend may take a minute or two to respond on the first request — Render spins it down when inactive. Just give it a moment.
+
 ## Features
 
 - Register / Login / Logout with JWT authentication
